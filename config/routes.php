@@ -6,9 +6,7 @@ use Psr\Log\LoggerInterface;
 use Slim\Container;
 
 $app->get('/', function (Request $request, Response $response) {
-    $response->getBody()->write("It works! This is the default welcome page.");
-
-    return $response;
+    return $this->get('view')->render($response, 'login.twig', []);
 })->setName('root');
 
 $app->get('/hello/{name}', function (Request $request, Response $response) {
