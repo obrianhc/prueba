@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Probando las templates con bootstrap{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <base href="{{ base_url() }}/"/>
+{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="card-header">
+            Time
+        </div>
+        <div class="card-body">
+            Current time: {{ now }}
+        </div>
+    </div>
+{% endblock %}
