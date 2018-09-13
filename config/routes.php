@@ -2,12 +2,16 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface ;
 use Slim\Container;
 
 $app->get('/', function (Request $request, Response $response) {
     return $this->get('view')->render($response, 'login.twig', []);
 })->setName('root');
+
+$app->post('/login', function(Request $request, Response $response){
+    
+});
 
 $app->get('/hello/{name}', function (Request $request, Response $response) {
     $name = $request->getAttribute('name');
@@ -51,3 +55,4 @@ $app->get('/databases', function (Request $request, Response $response) {
     // return a json response
     return $response->withJson($rows);
 });
+
