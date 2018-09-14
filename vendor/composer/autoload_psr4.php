@@ -25,6 +25,7 @@ return array(
     'FastRoute\\' => array($vendorDir . '/nikic/fast-route/src'),
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
     'App\\Test\\' => array($baseDir . '/tests'),
+    'App\\Models\\' => array($baseDir . '/models'),
     'App\\' => array($baseDir . '/src'),
     '' => array($vendorDir . '/nesbot/carbon/src'),
 );

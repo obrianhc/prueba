@@ -1,17 +1,13 @@
 <?php
-
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Log\LoggerInterface ;
 use Slim\Container;
+use App\Models;
 
 $app->get('/', function (Request $request, Response $response) {
     return $this->get('view')->render($response, 'login.twig', []);
 })->setName('root');
-
-$app->post('/login', function(Request $request, Response $response){
-    
-});
 
 $app->get('/hello/{name}', function (Request $request, Response $response) {
     $name = $request->getAttribute('name');
@@ -56,3 +52,31 @@ $app->get('/databases', function (Request $request, Response $response) {
     return $response->withJson($rows);
 });
 
+$app->post('/admin', function(Request $request, Response $response){
+    
+        $data = $request->getParsedBody();
+        $usuario = new \App\Models\Usuario($data['email'], null, $data['password'], $this);
+        $result = $usuario->auth();
+        if($result != null){
+            $_SESSION['username'] = $result;
+            return $this->get('view')->render($response, 'system.twig', ['status'=>'ok', 'info'=>$result[0]->name]);
+        } else {
+            return $this->get('view')->render($response, 'login.twig', ['status', 'error']);
+        }
+    
+});
+
+$app->get('/admin', function(Request $request, Response $response){
+    session_start();
+    if(isset($_SESSION['username'])){
+        return $this->get('view')->render($response, 'system.twig', ['status'=>'ok', 'info'=>$_SESSION['username']]);
+    } else {
+        return $this->get('view')->render($response, 'login.twig', ['status', 'error']);
+    }
+});
+
+$app->get('/logout', function(Request $request, Response $response){
+    session_start();
+    session_destroy();
+    return $this->get('view')->render($response, 'logout.twig', array());
+});

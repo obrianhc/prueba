@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar sesi&oacute;n{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <base href="{{ base_url() }}/"/>
+{% endblock %}
+{% block body %}
+    <h3>Adios</h3>
+    <a href="{{ base_url() }}/">Iniciar sesi&oacute;n</a>
+{% endblock %}
