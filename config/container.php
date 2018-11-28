@@ -6,6 +6,7 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 use Illuminate\Database\Connectors\ConnectionFactory;
 use Illuminate\Database\Connection;
+use App\Controllers;
 
 /** @var \Slim\App $app */
 $container = $app->getContainer();
@@ -36,6 +37,10 @@ $container['view'] = function (Container $container) {
 
     return $twig;
 };
+
+$twigEnvironment = $container['view'];
+$availableLang  = ['en', 'es'];
+$defaultLang = 'es';
 
 // Activando el log
 $container['logger'] = function (Container $container) {
@@ -99,4 +104,16 @@ $container['db'] = function (Container $container) {
 
 $container['pdo'] = function (Container $container) {
     return $container->get('db')->getPdo();
+};
+
+$container['PublicController'] = function($container){
+    return new Controllers\PublicController($container, $container->get('db'));
+};
+
+$container['AdminController'] = function($container){
+    return new Controllers\AdminController($container, $container->get('db'));
+};
+
+$container['NewsController'] = function($container){
+    return new Controllers\NewsController($container, $container->get('db'));
 };

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.twig" %}
 
 {% block title %}Iniciar sesi&oacute;n{% endblock %}
 {% block head %}
@@ -11,25 +11,38 @@
             Debe iniciar sesi&oacute;n
         </div>
     {% endif %}
-    <div class="row  justify-content-md-center">
+    <div class="row  justify-content-md-center main">
         <div class="col-lg-4 col-md-4 col-sm-10 col-xs-12">
             <div class="card">
-                <div class="card-header">
-                    Inicio de sesion
-                </div>
                 <div class="card-body">
-                    <form method="post" action="{{ base_url() }}/admin">
-                        <div class="form-group">
-                            <label class="" for="email">Correo electronico</label>
-                            <input type="email" name="email" id="email" placeholder="example@domain.com" class="form-control" required="required">
+                    <div class="row">
+                        <div class="col-lg col-md col-sm col-xs text-center">
+                            <img src="{{ base_url() }}/img/logo.png" class="logo-login">
                         </div>
-                        <div class="form-group">
-                            <label for="password">Contrase&ntilde;a</label>
-                            <input type="password" name="password" id="password" placeholder="*********" class="form-control" required="required">
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg col-md col-sm col-xs">
+                            <form method="post" action="{{ base_url() }}/{{ diccionario.lang }}/post-login">
+                                <div class="form-group">
+                                    <label for="email">{{ diccionario.email }}</label>
+                                    <input type="email" name="email" id="email" placeholder="example@domain.com" class="form-control" required="required">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">{{ diccionario.password }}</label>
+                                    <input type="password" name="password" id="password" placeholder="*********" class="form-control" required="required">
+                                </div>
+                                <input type="submit" class="btn btn-primary" value="{{ diccionario.login }}">
+                                <input type="reset" class="btn btn-danger" value="{{ diccionario.cancel }}">
+                            </form>
                         </div>
-                        <input type="submit" class="btn btn-primary" value="Aceptar">
-                        <input type="reset" class="btn btn-danger" value="Cancelar">
-                    </form>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        <div class="col-lg col-md col-sm col-xs">
+                            <a href="#">{{ diccionario.forgot_password }}</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

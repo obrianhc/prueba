@@ -5,78 +5,38 @@ use Psr\Log\LoggerInterface ;
 use Slim\Container;
 use App\Models;
 
-$app->get('/', function (Request $request, Response $response) {
-    return $this->get('view')->render($response, 'login.twig', []);
-})->setName('root');
+// Inicio de sesion
+session_start();
 
-$app->get('/hello/{name}', function (Request $request, Response $response) {
-    $name = $request->getAttribute('name');
-    $response->getBody()->write("Hello, $name");
+// Agregando el middelware a la aplicacion
 
-    return $response;
-});
+$app->add(new slim3_multilanguage\MultilanguageMiddleware([
+    'availableLang' => $availableLang,
+    'defaultLang' => $defaultLang,
+    'twig' => $twigEnvironment->getEnvironment(),
+    'container' => $container,
+    'langFolder' => '../lang/'
+]));
 
-$app->get('/time', function (Request $request, Response $response) {
-    $viewData = [
-        'now' => date('Y-m-d H:i:s')
-    ];
+$app->add($loggedInMiddleware);
 
-    return $this->get('view')->render($response, 'time.twig', $viewData);
-});
+$app->get('/no-page-multilanguage-support', 'CALLED FONCTION');
 
-$app->get('/logger-test', function (Request $request, Response $response) {
-    /** @var Container $this */
-    /** @var LoggerInterface $logger */
+$app->get('/', 'NewsController:index')->setName('index');
 
-    $logger = $this->get('logger');
-    $logger->error('My error message!');
+$app->group('/{lang:[a-z]{2}}', function () use ($container){
+    // Sitio de noticias
+    $this->get('', 'NewsController:index')->setName('index');
 
-    $response->getBody()->write("Success");
+    // Autenticacion
+    $this->get('/login', 'PublicController:login')->setName('login');
+    $this->post('/post-login', 'PublicController:auth')->setName('post-login');
+    $this->get('/logout', 'PublicController:logout')->setName('logout');
 
-    return $response;
-});
-
-// Generando una consulta
-use Illuminate\Database\Connection;
-
-$app->get('/databases', function (Request $request, Response $response) {
-    /** @var Container $this */
-    /** @var Connection $db */
-    
-    $db = $this->get('db');
-
-    // fetch all rows as collection
-    $rows = $db->table('information_schema.schemata')->get();
-
-    // return a json response
-    return $response->withJson($rows);
-});
-
-$app->post('/admin', function(Request $request, Response $response){
-    
-        $data = $request->getParsedBody();
-        $usuario = new \App\Models\Usuario($data['email'], null, $data['password'], $this);
-        $result = $usuario->auth();
-        if($result != null){
-            $_SESSION['username'] = $result;
-            return $this->get('view')->render($response, 'system.twig', ['status'=>'ok', 'info'=>$result[0]->name]);
-        } else {
-            return $this->get('view')->render($response, 'login.twig', ['status', 'error']);
-        }
-    
-});
-
-$app->get('/admin', function(Request $request, Response $response){
-    session_start();
-    if(isset($_SESSION['username'])){
-        return $this->get('view')->render($response, 'system.twig', ['status'=>'ok', 'info'=>$_SESSION['username']]);
-    } else {
-        return $this->get('view')->render($response, 'login.twig', ['status', 'error']);
-    }
-});
-
-$app->get('/logout', function(Request $request, Response $response){
-    session_start();
-    session_destroy();
-    return $this->get('view')->render($response, 'logout.twig', array());
+    // Sistema interno
+    $this->get('/admin', 'AdminController:admin')->setName('admin');
+    $this->get('/newpost', 'AdminController:newpost')->setName('newpost');
+    $this->get('/dashboard', 'AdminController:index')->setName('dashboard');
+    $this->get('/posts', 'AdminController:posts')->setName('posts');
+    $this->get('/categories', 'AdminController:categories')->setName('categories');
 });

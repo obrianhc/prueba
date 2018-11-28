@@ -3,30 +3,26 @@
 namespace App\Models;
 
 class Usuario{
-    private $email;
-    private $name;
-    private $pass;
-    private $app;
+    private $db;
 
-    public function __construct($email, $name, $pass, $enviroment){
-        $this->email = $email;
-        $this->pass = md5($pass);
-        $this->app = $enviroment;
+    public function __construct($db){
+        $this->db = $db;
     }
 
-    public function auth(){
-        $result = $this->app->db->table('base_user')
-                                ->select("name")
-                                ->where(["email"=>$this->email], 
-                                        ["password"=>$this->pass])->get();
+    public function auth($email, $password){
+        $result = $this->db->table('cms_user')
+                                ->select(array("id_user", "name", "email"))
+                                ->where(array("email"=>$email, "password"=>$password))->get();
         return $result;
     }
 
-    public function add(){
-        $result = $this->app->db->table('base_user')
-                                ->insert(["name" => $this-name, 
-                                        "email" => $this->email, 
-                                        "password" => $this->password]);
+    public function add($name, $email, $password){
+        $result = $this->db->table('cms_user')->insert(array("name" => $name, "email" => $email, "password" => $password));
         return $result;
+    }
+
+    public function updatePassword($id, $lastPassword, $newPassword){
+        $result = $this->db->table('cms_user')->select(array("password"))->where(array("id_user"=>$id))->get();
+        
     }
 }

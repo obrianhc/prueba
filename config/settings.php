@@ -22,7 +22,7 @@ $settings['twig'] = [
 $settings['db']['host'] = 'localhost';
 $settings['db']['username'] = 'root';
 $settings['db']['password'] = '';
-$settings['db']['database'] = 'base';
+$settings['db']['database'] = 'cms';
 $settings['db']['charset'] = 'utf8';
 $settings['db']['collation'] = 'utf8_unicode_ci';
 

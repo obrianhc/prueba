@@ -14,6 +14,10 @@ class ComposerStaticInit01f70b02e3751bb10ff5e057bd1e8b40
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'slim3_multilanguage\\' => 20,
+        ),
         'T' => 
         array (
             'Twig\\' => 5,
@@ -57,11 +61,16 @@ class ComposerStaticInit01f70b02e3751bb10ff5e057bd1e8b40
         array (
             'App\\Test\\' => 9,
             'App\\Models\\' => 11,
+            'App\\Controllers\\' => 16,
             'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'slim3_multilanguage\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lefuturiste/slim3_multilanguage/src',
+        ),
         'Twig\\' => 
         array (
             0 => __DIR__ . '/..' . '/twig/twig/src',
@@ -141,6 +150,10 @@ class ComposerStaticInit01f70b02e3751bb10ff5e057bd1e8b40
         'App\\Models\\' => 
         array (
             0 => __DIR__ . '/../..' . '/models',
+        ),
+        'App\\Controllers\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/controllers',
         ),
         'App\\' => 
         array (

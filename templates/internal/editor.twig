@@ -1,0 +1,87 @@
+{% extends "internal/ibase.twig" %}
+
+{% block title %}Sistema{% endblock %}
+{% block head %}
+    {{ parent() }}
+    <link href="{{ base_url() }}/css/quill.snow.css" rel="stylesheet">
+    <link href="{{ base_url() }}/css/bootstrap-tagsinput.css" rel="stylesheet">
+    <script src="{{ base_url() }}/js/bootstrap-tagsinput.js"></script>
+{% endblock %}
+{% block body %}
+    <div class="card">
+        <div class="card-body">
+            <form name="form1" action="{{ base_url() }}/{{ lang.lang }}/savepost" method="post">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ diccionario.title }}</label>
+                            <input type="text" class="form-control" name="title">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ diccionario.categories }}</label>
+                            <select name="categories" class="form-control">
+                                <option value="1">{{ diccionario.none }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ diccionario.tags }}</label>
+                            <input type="text" name="tags" data-role="tagsinput" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>{{ diccionario.default_image }}</label>
+                            <input type="file" name="default_image" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label>{{ diccionario.content }}</label>
+                            <div id="editor"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group text-right">
+                            <input type="submit" class="btn btn-primary" value="{{ diccionario.agree }}">
+                            <input type="reset" class="btn btn-danger" value="{{ diccionario.cancel }}">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ base_url() }}/js/quill.js"></script>
+
+    <script>
+        var toolbarOptions = [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+
+            ['image', 'video'],
+
+            ['clean']                                         // remove formatting button
+        ];
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: toolbarOptions
+            }
+        });
+    </script>
+{% endblock %}

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'slim3_multilanguage\\' => array($vendorDir . '/lefuturiste/slim3_multilanguage/src'),
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
@@ -26,6 +27,7 @@ return array(
     'Doctrine\\Common\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Common/Inflector'),
     'App\\Test\\' => array($baseDir . '/tests'),
     'App\\Models\\' => array($baseDir . '/models'),
+    'App\\Controllers\\' => array($baseDir . '/controllers'),
     'App\\' => array($baseDir . '/src'),
     '' => array($vendorDir . '/nesbot/carbon/src'),
 );
