@@ -4,45 +4,54 @@ namespace App\Controllers;
 
 use PsrHttpMessageServerRequestInterface as Request;
 use PsrHttpMessageResponseInterface as Response;
-use App\Models\Usuario;
+use App\Models\Agenda;
 
 class PublicController{
     private $container;
-    private $db;
-    private $lang;
 
-    public function __construct($container, $db)
+    public function __construct($container)
     {
-        $this->container = $container;
-        $this->lang = $container->dictionary;
-        $this->db = $db;
+        $this->container = $container;   
     }
 
-    public function login($request, $response, $args){
-        $data = array(
-            "diccionario"=>$this->lang
-        );
-        $this->container->view->render($response, 'login.twig', $data);
-    }
-
-    public function auth($request, $response, $args){
-        $data = $request->getParsedBody();
-        $email = $data['email'];
-        $password = md5($data['password']);
-        $usuario = new Usuario($this->db);
-        $result = $usuario->auth($email, $password);
-        if(count($result)>0){
-            $_SESSION['username'] = $result[0]->name;
-            $_SESSION['id_user'] = $result[0]->id_user;
-            $_SESSION['email'] = $result[0]->email;
-            return $response->withRedirect('/cms/'.$this->lang['lang'].'/dashboard');
-        } else {
-            return $response->withRedirect('/cms/'.$this->lang['lang'].'login');
+    public function interactuar($request, $response, $args){
+        $datos = $request->getParsedBody();
+        $oficina = $datos['datos'][0]["office"][0];
+        $almuerzo = $datos['datos'][1]["lunch"][0];
+        $cantidad = count($datos['datos']);
+        $arreglo = array();
+        for($x = 0; $x < $cantidad-2; $x++){
+            array_push($arreglo, new Agenda());
+            $arreglo[$x]->addOffice($oficina);
+            $arreglo[$x]->addLunch($almuerzo);
+            $arreglo[$x]->setName($datos['datos'][$x+2]['usuario']);
+            foreach($datos['datos'][$x+2]['citas'] as $cita){
+                $arreglo[$x]->addEvent($cita);
+            }
         }
-    }
 
-    public function logout($request, $response, $args){
-        session_destroy();
-        return $response->withRedirect('/cms/'.$this->lang['lang']);
+        $libres = array();
+        for($x = 0; $x < 48; $x++){
+            array_push($libres, array());
+            foreach($arreglo as $agenda){
+                if(count($agenda->horario[$x])==0){
+                    array_push($libres[$x], $agenda->nombre);
+                } else if(count($agenda->horario[$x])==1 && $agenda->horario[$x][0]=='oficina'){
+                    array_push($libres[$x], 'trabajo '.$agenda->nombre);
+                }
+            }
+        }
+
+        $horario = array();
+        for($x = 0; $x < 48; $x++){
+            $exacta = intval(($x) / 2);
+            $media = (intval(($x) % 2)==0?"00":"30");
+            if(count($libres[$x])>3){
+                array_push($libres[$x], $exacta.':'.$media);
+                array_push($horario, $libres[$x]);
+            }
+        }
+
+        echo json_encode($horario);
     }
 }

@@ -107,5 +107,5 @@ $container['pdo'] = function (Container $container) {
 };
 
 $container['PublicController'] = function($container){
-    return new Controllers\PublicController($container, $container->get('db'));
+    return new Controllers\PublicController($container);
 };
