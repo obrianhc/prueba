@@ -109,11 +109,3 @@ $container['pdo'] = function (Container $container) {
 $container['PublicController'] = function($container){
     return new Controllers\PublicController($container, $container->get('db'));
 };
-
-$container['AdminController'] = function($container){
-    return new Controllers\AdminController($container, $container->get('db'));
-};
-
-$container['NewsController'] = function($container){
-    return new Controllers\NewsController($container, $container->get('db'));
-};
